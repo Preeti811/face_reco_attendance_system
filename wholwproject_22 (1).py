@@ -1,17 +1,17 @@
 import os
 import cv2
 from tkinter import *
+import mysql.connector as mysql
+import tkinter.messagebox as MessageBox
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import tkinter.font as font
 
 
-path = 'C:\\Users\\hp\\Desktop\\python'
+path = 'C:\\Users\\GAUTAM\\Desktop\\faceimage_database'
 
 camera_port = 0
-
-rate_frame = 30
-# rate_of_iamge=30
+rate_frame = 30   # rate_of_image=30
 
 
 def click_photo(name):
@@ -23,27 +23,22 @@ def click_photo(name):
     if button['text'] == 'click_images':
 
         button['text'] = "another user"
-
         os.chdir(path)
-
         Newfolder = name
 
         if Newfolder == "##":
             return
 
         os.makedirs(Newfolder)
-
         path2 = path+"\\"+Newfolder
-
         os.chdir(path2)
-
         img_count = 0
 
         newfolder = "images"
-
         os.makedirs(newfolder)
-
         path_images = path2+"\\"+newfolder
+
+
 
         while True:
 
@@ -67,14 +62,11 @@ def click_photo(name):
             else:
 
                 os.chdir(path_images)
-
                 image_name = "iamge_sample_{}.png".format(img_count)
-
                 cv2.imwrite(image_name, frame)
-
                 print("image is taken")
-
                 img_count += 1
+
     else:
         button['text'] = "click_images"
 
@@ -82,26 +74,22 @@ def click_photo(name):
 # --------------------------------------------------------
 win = Tk(className="face_racognation")
 
-win.resizable(1, 1)
+# win.resizable(1, 1)
 
-win.geometry('700x400')
-
+win.geometry('700x500')
 win.attributes('-topmost', 1)
-
 
 myfont = font.Font(family="Arial", size=20, weight='bold')
 
-label = Label(win, text="Face recognisation app", padx=500,
-              pady=10, font=myfont, bg="lightblue")
+label = Label(win, text="Face recognisation app", padx=500,pady=10, font=myfont, bg="lightblue")
 label.pack()
 
+gui = Frame(win, pady=80, padx=80, bg="lightBlue", borderwidth=5)
+#gui.pack()
 
-gui = Frame(win, bg="lightBlue", pady=80, padx=80, borderwidth=5)
-# gui.pack()
 forth = Frame(win, padx=10, pady=10, bg="brown")
 
-
-second = Frame(win, bg="orange", pady=100, padx=150)
+second = Frame(win, pady=100, padx=150, bg="orange")
 second.place(x=150, y=90)
 
 third = Frame(win, pady=20, padx=20)
@@ -135,19 +123,32 @@ def save():
     if save_B['text'] == 'SAVE':
         save_B['text'] = "SAVED"
 
-        messagebox.showinfo('notification','ready to pose')
         name = entryname.get()
-        phone_no = entrypass.get()
+        reg = entryreg.get()
+        phone = entryphonenumber.get()
+        mail = entryemail.get()
+
+        if (name == "" or phone == "" or reg == "" or mail == ""):
+            MessageBox.showinfo("Insert status", "All fields are required")
+        else:
+            con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+            cursor = con.cursor()
+         #   pathimagetosave = str(path) + str('\\') + name + str('\\images') galat h error aa raha
+            cursor.execute("INSERT into project_database1.clientinfo (name, reg_no, phone, email) VALUES ('"+name+"', '" + reg + "', '" + phone + "', '" + mail + "')  ")
+            cursor.execute("commit");
+
+            MessageBox.showinfo("Insert Status", "Inserted user information successfully")
+            con.close()
+
+        messagebox.showinfo('notification', 'ready to pose')
+        name = entryname.get()
         # other type of message
         # messagebox.askokcancel("askokcancel", "Want to continue?")
-        mysavelabel = Label(gui, text="done! "+name,
-                            bg="lightblue", fg="green")
-        mysavelabel.grid(row=3, column=2)
+        mysavelabel = Label(gui, text="done! "+name, bg="lightblue", fg="green")
+        mysavelabel.grid(row=5, column=2)
         print(name)
-        print(phone_no)
         global button
-        button = Button(gui, text="click_images",
-                        command=lambda: click_photo(name))
+        button = Button(gui, text="click_images", command=lambda: click_photo(name))
         button.grid(row=6, column=3)
 
     else:
@@ -161,7 +162,7 @@ def clear():
 
         button.destroy()
     entryname.delete(0, END)
-    entrypass.delete(0, END)
+    #entrypass.delete(0, END)
     return
 
 
@@ -207,37 +208,40 @@ def back():
 
 E_label = Label(gui, text="  ", bg="lightblue")
 
-username = Label(gui, text="Enter the user name : ",
-                 bg="lightblue", borderwidth=3, font="12")
+reg = Label(gui, text="Enter the registration no. : ", bg="lightblue", borderwidth=3, font="12")
+entryreg = Entry(gui, width=35, borderwidth=5)
 
+username = Label(gui, text="Enter the user name : ", bg="lightblue", borderwidth=3, font="12")
 entryname = Entry(gui, width=35, borderwidth=5)
-entryname.insert(0, "user_name")
 
-entrypass = Entry(gui, width=35, show="*", borderwidth=5)
-entrypass.insert(0, "8449383940")
+phonenumber = Label(gui, text="Enter phone number : ", bg="lightblue", borderwidth=3, font="12")
+entryphonenumber = Entry(gui, width=35, borderwidth=5)
 
-save_B = Button(gui, text="SAVE", padx=24, pady=5, command=save,
-                bg="orange", activeforeground="green")
+email = Label(gui, text="Enter email_id : ", bg="lightblue", borderwidth=3, font="12")
+entryemail = Entry(gui, width=35, borderwidth=5)
+
+save_B = Button(gui, text="SAVE", padx=24, pady=5, command=save, bg="orange", activeforeground="green")
 exit_B = Button(gui, text="EXIT", padx=20, pady=4, command=exit)
-
 clear_B = Button(gui, text="Clear", padx=24, pady=5, command=clear)
 
+reg.grid(row=0, column=0)
+entryreg.grid(row=0,column=1, columnspan=4, padx=10, pady=10)
+username.grid(row=1, column=0)
+entryname.grid(row=1, column=1, columnspan=4, padx=10, pady=10)
+phonenumber.grid(row=2, column=0)
+entryphonenumber.grid(row=2, column=1, columnspan=4, padx=10, pady=10)
+email.grid(row=3, column=0)
+entryemail.grid(row=3, column=1, columnspan=4, padx=10, pady=10)
 
-username.grid(row=0, column=0)
-entryname.grid(row=0, column=1, columnspan=4, padx=10, pady=10)
-entrypass.grid(row=1, column=1, columnspan=4, padx=10, pady=10)
-clear_B.grid(row=2, column=3)
-save_B.grid(row=2, column=1)
-exit_B.grid(row=5, column=2)
-E_label.grid(row=4, column=2)
+clear_B.grid(row=5, column=3)
+save_B.grid(row=5, column=1)
+exit_B.grid(row=8, column=2)
+E_label.grid(row=7, column=2)
 
 
-switch_B = Button(second, text=" ADD User ", font="arial 10 bold",
-                  command=switch_to_add, pady=8, padx=8)
-button_check = Button(second, text="Find face",
-                      font="arial 12", command=find, pady=5, padx=9)
-exit_b2 = Button(second, text="EXIT", font="arial 12",
-                 command=exit_2, padx=10, pady=1)
+switch_B = Button(second, text=" ADD User ", font="arial 10 bold", command=switch_to_add, pady=8, padx=8)
+button_check = Button(second, text="Find face", font="arial 12", command=find, pady=5, padx=9)
+exit_b2 = Button(second, text="EXIT", font="arial 12", command=exit_2, padx=10, pady=1)
 label_b = Label(second, text=" ", bg="orange")
 label_b2 = Label(second, text="", bg="orange")
 
@@ -251,8 +255,7 @@ label1 = Label(third, text="copyright @rt", fg="red").pack()
 
 return_button = Button(win, text="Return", font="12,bold", command=back)
 
-label_side = Label(side, text="Instruction", bg="lightgreen",
-                   font="arial 19 ", padx=50, pady=10)
+label_side = Label(side, text="Instruction", bg="lightgreen", font="arial 19 ", padx=50, pady=10)
 label_side.pack()
 
 win.mainloop()
