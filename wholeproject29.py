@@ -1,32 +1,31 @@
 import os
 import cv2
 from tkinter import *
+import mysql.connector as mysql
+import tkinter.messagebox as MessageBox
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import tkinter.font as font
-import mysql.connector as mysql
 
-path = 'C:\\Users\\hp\\Desktop\\python'
+path = 'C:\\Users\\GAUTAM\\Desktop\\faceimage_database'
 
 camera_port = 0
 
-rate_frame = 30
-# rate_of_iamge=30
+rate_frame = 30             # rate_of_iamge=30
 
 # sql functions ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-# def show():
-#     con = mysql.connect(host="localhost", user="root",
-#                         password="123456789", database="project_db1")
-#     cursor = con.cursor()
-#     cursor.execute("select * from project_db1.new_table ")
-#     rows = cursor.fetchall()
-#     list.delete(0, list.size())
+def show():
+     con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+     cursor = con.cursor()
+     cursor.execute("select * from project_database1.clientinfo")
+     rows = cursor.fetchall()
+     list.delete(0, list.size())
 
-#     for row in rows:
-#         insertData = str(row[0])+'     ' + row[1]
-#         list.insert(list.size()+1, insertData)
+     for row in rows:
+         insertdata = str(row[0])+'     ' + row[1]
+         list.insert(list.size()+1, insertdata)
 
 #     con.close()
 
@@ -57,7 +56,7 @@ def click_photo(name):
 
         os.makedirs(Newfolder)
 
-        path2 = path+"\\"+Newfolder
+        path2 = path + "\\" + Newfolder
 
         os.chdir(path2)
 
@@ -67,7 +66,7 @@ def click_photo(name):
 
         os.makedirs(newfolder)
 
-        path_images = path2+"\\"+newfolder
+        path_images = path2 + "\\" + newfolder
 
         while True:
 
@@ -79,7 +78,7 @@ def click_photo(name):
                     print("fail to capture image")
                     break
 
-                     # show_framecam(frame)
+                    # show_framecam(frame)
 
             camera_win = cv2.imshow("image_frame", frame)
 
@@ -94,7 +93,7 @@ def click_photo(name):
 
                 os.chdir(path_images)
 
-                image_name = name+"_image_{}.png".format(img_count)
+                image_name = name + "_image_{}.png".format(img_count)
 
                 cv2.imwrite(image_name, frame)
 
@@ -122,10 +121,9 @@ win = Tk(className="face_racognation")
 
 win.resizable(1, 1)
 
-win.geometry('700x400')
+win.geometry('1000x600')
 
 win.attributes('-topmost', 1)
-
 
 myfont = font.Font(family="Arial", size=20, weight='bold')
 
@@ -133,11 +131,9 @@ label = Label(win, text="Face recognisation app", padx=500,
               pady=10, font=myfont, bg="lightblue")
 label.pack()
 
-
 gui = Frame(win, bg="lightBlue", pady=80, padx=80, borderwidth=5)
 # gui.pack()
 forth = Frame(win, padx=10, pady=10, bg="brown")
-
 
 second = Frame(win, bg="orange", pady=100, padx=150)
 second.place(x=450, y=170)
@@ -149,6 +145,7 @@ side = Frame(win, pady=20, padx=20, background="lightgreen")
 side.place(x=0, y=55)
 
 six = Frame(win)
+
 
 # -------------------------------------------------------------------
 
@@ -163,6 +160,8 @@ def show_frames():
     label_cam.configure(image=imgtk)
     # Repeat after an interval to capture continiously
     label.after(20, show_frames)
+
+
 # this above camera opener is not undersatood -----------------------------------------
 
 
@@ -171,69 +170,70 @@ def exit():
     return
 
 
-def save():
+def save():                                       #working appropriately
     if save_B['text'] == 'SAVE':
         save_B['text'] = "SAVED"
 
-        dname = entryname.get()
         dregistration = entryregi.get()
+        dname = entryname.get()
         dphone = entryphone.get()
-        demail = entryemail.get()
         dbranch = entrybranch.get()
+        demail = entryemail.get()
 
         if dregistration == "" or dname == "":
             messagebox.showinfo("Insert status", "All fields are required")
         else:
-
-            mysavelabel = Label(win, text="done! "+dname,
-                                bg="lightblue", fg="green",font="bold 12")
-            mysavelabel.place(x=650,y=100)
+            mysavelabel = Label(win, text="done! " + dname, bg="lightblue", fg="green", font="bold 12")
+            mysavelabel.place(x=650, y=100)
             print(dname)
+            print(dregistration)
             print(dphone)
             print(demail)
             print(dbranch)
             global button
-            button = Button(gui, text="click_images",
-                            command=lambda: click_photo(dregistration))
+            button = Button(gui, text="click_images", command=lambda: click_photo(dregistration))
             button.grid(row=9, column=9)
 
-            # con = mysql.connect(host="localhost", user="root",
-            #                     password="123456789", database="project_db1")
-            # cursor = con.cursor()
-            # cursor.execute("INSERT into project_db1.new_table (registration ,name,phone, branch, email) VALUES ('" +
-            #                dregistration+"', '"+dname+"', '"+dphone+"','"+dbranch+"' '"+demail+"')")
-            # cursor.execute("commit")
+            con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+            cursor = con.cursor()
+            cursor.execute("INSERT into project_database1.clientinfo (registration,name,phone,branch,email) VALUES ('"+dregistration+"', '"+dname+"', '"+dphone+"','"+dbranch+"' ,'"+demail+"') ")
+            cursor.execute("commit")
 
-            # dregistration.delete(0, 'end')
-            # dname.delete(0, 'end')
-            # dphone.delete(0, 'end')
-            # dbranch.delete(0, 'end')
-            # demail.delete(0, 'end')
-            # show()
-            # messagebox.showinfo("Insert Status", "Inserted successfully")
-            # con.close()
+            show()
+            messagebox.showinfo("Insert Status", "Inserted successfully")
+
+            entryregi.delete(0, 'end')
+            entryname.delete(0, 'end')
+            entryphone.delete(0, 'end')
+            entrybranch.delete(0, 'end')
+            entryemail.delete(0, 'end')
+
+            con.close()
 
         # other type of message
         # MessageBox.askokcancel("askokcancel", "Want to continue?")
 
-           
+
     else:
         save_B['text'] = 'SAVE'
 
 
-def clear():
+def clear():                                                  #working appropriately
     save_B['text'] = 'SAVE'
     if save_B['text'] == "SAVED":
         button['text'] = "click_images"
 
         button.destroy()
+
     entryname.delete(0, END)
     entryregi.delete(0, END)
+    entryphone.delete(0, 'end')
+    entrybranch.delete(0, 'end')
+    entryemail.delete(0, 'end')
     return
 
 
 def exit_2():
-
     win.quit()
     return
 
@@ -243,6 +243,7 @@ def switch_to_add():
     gui.place(x=260, y=55)
     forth.place(x=500, y=70)
     second.place_forget()
+    show()
 
 
 def find():
@@ -269,40 +270,88 @@ def back():
     cap.release()
     cv2.destroyAllWindows()
     second.place(x=450, y=80)
+
+
 # -------------------------------------------------------------------
 ####sql function run after save only ++++++++++++++++++++++++++++++++++++++++++++++
-    
-
-# def _delete():
-#     if(entryregi.get()==""):
-#         messagebox.showinfo("Delete status", "Id is required for deletion")
-#     else:
-#         con = mysql.connect(host="localhost", user="root", password="123456789", database="project_db1")
-#         cursor = con.cursor()
-#         cursor.execute("delete from project_db1.new_table where registration='"+entryregi.get()+"'")
-#         cursor.execute("commit")
-
-#         # dregistration.delete(0, 'end')
-#         # dname.delete(0, 'end')
-#         # dphone.delete(0, 'end')
-#         # dbranch.delete(0, 'end')
-#         # demail.delete(0, 'end')
-    
-#         show()
-#         messagebox.showinfo("Delete Status", "Deleted successfully")
-#         con.close()    
 
 
+def delete():                                               #working appropriately
+     if entryregi.get()=="":
+        messagebox.showinfo("Delete status", "Id is required for deletion")
+
+     else:
+        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+        cursor = con.cursor()
+        cursor.execute("delete from project_database1.clientinfo where registration='"+entryregi.get()+"'")
+        cursor.execute("commit")
+
+
+        entryregi.delete(0, 'end')
+        entryname.delete(0, 'end')
+        entryphone.delete(0, 'end')
+        entrybranch.delete(0, 'end')
+        entryemail.delete(0, 'end')
+
+        show()
+        messagebox.showinfo("Delete Status", "Deleted successfully")
+        con.close()
+
+
+def _update():                                                 #working properly
+
+    dregistration = entryregi.get()
+    dname = entryname.get()
+    dphone = entryphone.get()
+    dbranch = entrybranch.get()
+    demail = entryemail.get()
+
+    if (dregistration == "" or dname == "" or dphone == "" or dbranch == "" or demail == ""):
+        MessageBox.showinfo("Update status", "All fields are required")
+    else:
+        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+        cursor = con.cursor()
+        cursor.execute("update clientinfo set  name='"+dname+"',phone='"+dphone+"',branch='"+dbranch+"', email='"+demail+"' WHERE registration='"+dregistration+"' ")
+        cursor.execute("commit")
+
+        entryregi.delete(0, 'end')
+        entryname.delete(0, 'end')
+        entryphone.delete(0, 'end')
+        entrybranch.delete(0, 'end')
+        entryemail.delete(0, 'end')
+
+        show()
+        MessageBox.showinfo("Update Status", "Updated successfully")
+        con.close()
+
+
+def _get():                                         #working properly
+    if (entryregi.get() == ""):
+        MessageBox.showinfo("Fetch status", "Id is required for deletion")
+    else:
+        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+        cursor = con.cursor()
+        cursor.execute("select * from project_database1.clientinfo WHERE registration='"+entryregi.get()+"'")
+        rows=cursor.fetchall()
+
+        for row in rows:
+            entryname.insert(0, row[1])
+            entryphone.insert(0, row[2])
+            entrybranch.insert(0, row[3])
+            entryemail.insert(0, row[4])
+
+
+        con.close()
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        
-        
+
+
 E1_label = Label(gui, text="  ", bg="lightblue")
 E2_label = Label(gui, text="  ", bg="lightblue")
 
 username = Label(gui, text="Enter the user name : ",
                  bg="lightblue", borderwidth=3, font="12")
 regi = Label(gui, text="Enter the registration number : ",
-                     bg="lightblue", borderwidth=3, font="12")
+             bg="lightblue", borderwidth=3, font="12")
 phone = Label(gui, text="Enter the phone number : ",
               bg="lightblue", borderwidth=3, font="12")
 branch = Label(gui, text="Enter the branch : ",
@@ -311,22 +360,21 @@ email = Label(gui, text="Enter the Email id : ",
               bg="lightblue", borderwidth=3, font="12")
 
 entryname = Entry(gui, width=35, borderwidth=5)
-entryname.insert(0, "user name xyz")
+#entryname.insert(0, "user name xyz")
 entrybranch = Entry(gui, width=35, borderwidth=5)
 entryphone = Entry(gui, width=35, borderwidth=5)
 entryemail = Entry(gui, width=35, borderwidth=5)
 entryregi = Entry(gui, width=35, borderwidth=5)
 
-
 # button__________________________________________
 
-Bdelete = Button(gui, text="Delete", font=("bold", 10), padx=10, pady=5)
+Bdelete = Button(gui, text="Delete", font=("bold", 10), padx=10, pady=5, command=delete)
 
-update = Button(gui, text="Update", font=("bold", 10), padx=10, pady=5)
+update = Button(gui, text="Update", font=("bold", 10), padx=10, pady=5, command=_update)
 
-get = Button(gui, text="Get", font=("bold", 10), padx=15, pady=5)
+get = Button(gui, text="Get", font=("bold", 10), padx=15, pady=5,command=_get)
 
-data_label=LabelFrame(gui,text="Database", font="bold",bg="lightblue")
+data_label = LabelFrame(gui, text="Database", font="bold", bg="lightblue")
 list = Listbox(data_label)
 list.pack()
 
@@ -336,21 +384,20 @@ exit_B = Button(gui, text="EXIT", padx=20, pady=4, command=exit)
 
 clear_B = Button(gui, text="Clear", padx=24, pady=5, command=clear)
 
-
 # ______________________________________________________________
 
-username.grid(row=0, column=0)
-entryname.grid(row=0, column=1, columnspan=4, padx=2, pady=10)
-regi.grid(row=1, column=0)
-entryregi.grid(row=1, column=1, columnspan=4, padx=2, pady=10)
+regi.grid(row=0, column=0)
+entryregi.grid(row=0, column=1, columnspan=4, padx=2, pady=10)
+username.grid(row=1, column=0)
+entryname.grid(row=1, column=1, columnspan=4, padx=2, pady=10)
 phone.grid(row=2, column=0)
 entryphone.grid(row=2, column=1, columnspan=4, padx=2, pady=10)
 branch.grid(row=3, column=0)
 entrybranch.grid(row=3, column=1, columnspan=4, padx=2, pady=10)
 email.grid(row=4, column=0)
 entryemail.grid(row=4, column=1, columnspan=4, padx=2, pady=10)
-clear_B.grid(row=5, column=3,padx=5)
-save_B.grid(row=5, column=1,padx=5)
+clear_B.grid(row=5, column=3, padx=5)
+save_B.grid(row=5, column=1, padx=5)
 E1_label.grid(row=6, column=2)
 get.grid(row=7, column=1)
 update.grid(row=7, column=3)
