@@ -11,7 +11,7 @@ path = 'C:\\Users\\GAUTAM\\Desktop\\faceimage_database'
 
 camera_port = 0
 
-rate_frame = 30             # rate_of_iamge=30
+rate_frame = 10            # rate_of_iamge=30
 
 # sql functions ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -79,7 +79,7 @@ def click_photo(dregistration):
 
             k = cv2.waitKey(1)
 
-            if img_count > 10:
+            if img_count > 70:
                 camera.release()
                 cv2.destroyAllWindows()
                 break
