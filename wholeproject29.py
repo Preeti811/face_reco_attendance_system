@@ -17,9 +17,9 @@ rate_frame = 30             # rate_of_iamge=30
 
 
 def show():
-     con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+     con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_db1")
      cursor = con.cursor()
-     cursor.execute("select * from project_database1.clientinfo")
+     cursor.execute("select * from project_db1.new_table")
      rows = cursor.fetchall()
      list.delete(0, list.size())
 
@@ -32,7 +32,7 @@ def show():
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-def click_photo(name):
+def click_photo(dregistration):
     # gui.place_forget()
     # return_button.place_forget()
     # forth.place_forget()
@@ -49,7 +49,7 @@ def click_photo(name):
 
         os.chdir(path)
 
-        Newfolder = name
+        Newfolder = dregistration
 
         if Newfolder == "##":
             return
@@ -58,15 +58,10 @@ def click_photo(name):
 
         path2 = path + "\\" + Newfolder
 
-        os.chdir(path2)
-
         img_count = 0
 
-        newfolder = "images"
+        path_images = path2
 
-        os.makedirs(newfolder)
-
-        path_images = path2 + "\\" + newfolder
 
         while True:
 
@@ -93,7 +88,7 @@ def click_photo(name):
 
                 os.chdir(path_images)
 
-                image_name = name + "_image_{}.png".format(img_count)
+                image_name = str(dregistration) + "_image_{}.png".format(img_count)
 
                 cv2.imwrite(image_name, frame)
 
@@ -194,9 +189,9 @@ def save():                                       #working appropriately
             button = Button(gui, text="click_images", command=lambda: click_photo(dregistration))
             button.grid(row=9, column=9)
 
-            con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+            con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_db1")
             cursor = con.cursor()
-            cursor.execute("INSERT into project_database1.clientinfo (registration,name,phone,branch,email) VALUES ('"+dregistration+"', '"+dname+"', '"+dphone+"','"+dbranch+"' ,'"+demail+"') ")
+            cursor.execute("INSERT into project_db1.new_table (registration,name,phone,branch,email) VALUES ('"+dregistration+"', '"+dname+"', '"+dphone+"','"+dbranch+"' ,'"+demail+"') ")
             cursor.execute("commit")
 
             show()
@@ -281,9 +276,9 @@ def delete():                                               #working appropriate
         messagebox.showinfo("Delete status", "Id is required for deletion")
 
      else:
-        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_db1")
         cursor = con.cursor()
-        cursor.execute("delete from project_database1.clientinfo where registration='"+entryregi.get()+"'")
+        cursor.execute("delete from project_db1.new_table where registration='"+entryregi.get()+"'")
         cursor.execute("commit")
 
 
@@ -309,9 +304,9 @@ def _update():                                                 #working properly
     if (dregistration == "" or dname == "" or dphone == "" or dbranch == "" or demail == ""):
         MessageBox.showinfo("Update status", "All fields are required")
     else:
-        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_db1")
         cursor = con.cursor()
-        cursor.execute("update clientinfo set  name='"+dname+"',phone='"+dphone+"',branch='"+dbranch+"', email='"+demail+"' WHERE registration='"+dregistration+"' ")
+        cursor.execute("update new_table set  name='"+dname+"',phone='"+dphone+"',branch='"+dbranch+"', email='"+demail+"' WHERE registration='"+dregistration+"' ")
         cursor.execute("commit")
 
         entryregi.delete(0, 'end')
@@ -329,9 +324,9 @@ def _get():                                         #working properly
     if (entryregi.get() == ""):
         MessageBox.showinfo("Fetch status", "Id is required for deletion")
     else:
-        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_database1")
+        con = mysql.connect(host="localhost", user="root", password="1234567890", database="project_db1")
         cursor = con.cursor()
-        cursor.execute("select * from project_database1.clientinfo WHERE registration='"+entryregi.get()+"'")
+        cursor.execute("select * from project_db1.new_table WHERE registration='"+entryregi.get()+"'")
         rows=cursor.fetchall()
 
         for row in rows:
@@ -422,14 +417,14 @@ switch_B.pack()
 label_b2.pack()
 exit_b2.pack()
 
-label1 = Label(third, text="copyright @rt", fg="red").pack()
+label1 = Label(third, text="copyright @rt", fg="red")
 
 return_button = Button(win, text="Return", font="12,bold", command=back)
 
 label_side = Label(side, text="Instruction", bg="lightgreen",
                    font="arial 19 ", padx=50, pady=10)
 label_side.pack()
-
+label1.pack()
 label_wincam = Label(six)
 label_wincam.pack()
 # show()
