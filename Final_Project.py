@@ -8,6 +8,7 @@ from PIL import Image, ImageTk
 import tkinter.font as font
 import numpy as np
 import faceRecognition as fr
+from datetime import datetime
 
 path = 'C:\\Users\\GAUTAM\\Desktop\\faceimage_database\\training_images'
 
@@ -157,6 +158,20 @@ six = Frame(win)
 
 # -------------------------------------------------------------------
 
+def markAttendance(name):
+  with open('Attendance.csv', 'r+') as f:
+    myDataList = f.readlines()
+    nameList = []
+    for line in myDataList:
+        entry = line.split(',')
+        nameList.append(entry[0])
+    if name not in nameList:
+        now = datetime.now()
+        dtString = now.strftime('%H:%M:%S')
+        f.writelines(f'\n{name},{dtString}')
+        print('attendance marked : ' + name )
+
+
 
 def show_frames():
     # # Get the latest frame and convert into Image
@@ -177,12 +192,13 @@ def show_frames():
         (x, y, w, h) = face
         roi_gray = gray_img[y:y + w, x:x + h]
         label_reg, confidence = face_recognizer.predict(roi_gray)  # predicting the label of given image
-        print("confidence:", confidence)
-        print("label:", label_reg)
+        # print("confidence:", confidence)        #will print confidence value lesser the value,better the match
+        # print("label:", label_reg)              #will print registration no of person detected
         fr.draw_rect(cv2image, face)
         predicted_name = str(label_reg)
-        if confidence < 50:  # If confidence less than 37 then don't print predicted face text on screen
+        if confidence < 50:
             fr.put_text(cv2image, predicted_name, x, y)
+            markAttendance(str(label_reg))
 
     resized_img = cv2.resize(cv2image, (1000, 600))
 
@@ -277,7 +293,7 @@ def find():
     gui.place_forget()
     forth.place_forget()
     # return_button.place_forget()
-    return_button.place(x=1200, y=70)
+    return_button.place(x=1300, y=70)
     second.place_forget()
     global label_cam
     label_cam = Label(win)
