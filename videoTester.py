@@ -3,8 +3,7 @@ import cv2
 import numpy as np
 import faceRecognition as fr
 
-
-#This module captures images via webcam and performs face recognition
+#This module captures images via webcamera and performs face recognition
 face_recognizer = cv2.face.LBPHFaceRecognizer_create()
 face_recognizer.read('C:\\Users\\GAUTAM\\Desktop\\faceimage_database\\trainingData.yml')#Load saved training data
 
