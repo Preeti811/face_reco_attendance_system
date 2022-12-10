@@ -192,8 +192,8 @@ def show_frames():
         (x, y, w, h) = face
         roi_gray = gray_img[y:y + w, x:x + h]
         label_reg, confidence = face_recognizer.predict(roi_gray)  # predicting the label of given image
-        # print("confidence:", confidence)        #will print confidence value lesser the value,better the match
-        # print("label:", label_reg)              #will print registration no of person detected
+        #print("confidence:", confidence)        #will print confidence value lesser the value,better the match
+        print("label:", label_reg)              #will print registration no of person detected
         fr.draw_rect(cv2image, face)
         predicted_name = str(label_reg)
         if confidence < 50:
@@ -281,7 +281,7 @@ def exit_2():
 
 
 def switch_to_add():
-    return_button.place(x=1200, y=70)
+    return_button2.place(x=1200, y=70)
     gui.place(x=260, y=55)
     forth.place(x=500, y=70)
     second.place_forget()
@@ -316,6 +316,12 @@ def back():
     label_cam.pack_forget()
     cap.release()
     cv2.destroyAllWindows()
+    second.place(x=450, y=80)
+
+def back2():
+    gui.place_forget()
+    return_button2.place_forget()
+    forth.place_forget()
     second.place(x=450, y=80)
 
 
@@ -471,7 +477,8 @@ exit_b2.pack()
 
 label1 = Label(third, text="copyright @rt", fg="red")
 
-return_button = Button(win, text="Return", font="12,bold", command=back)
+return_button = Button(win, text="Return", font="12,bold", command=back)   #for find face section
+return_button2 = Button(win, text="Return", font="12,bold", command=back2) #for add user section
 
 label_side = Label(side, text="Instruction", bg="lightgreen",
                    font="arial 19 ", padx=50, pady=10)
