@@ -5,8 +5,9 @@ import faceRecognition as fr
 
 #This module captures images via webcamera and performs face recognition
 face_recognizer = cv2.face.LBPHFaceRecognizer_create()
-face_recognizer.read('C:\\Users\\GAUTAM\\Desktop\\faceimage_database\\trainingData.yml')#Load saved training data
+face_recognizer.read('C:\\Users\\PREETI\\Desktop\\faceimage_database\\trainingData.yml')#Load saved training data
 
+#open the webcam
 cap = cv2.VideoCapture(0)
 
 while True:
@@ -16,9 +17,11 @@ while True:
     for face in faces_detected:
         (x,y,w,h)=face
         roi_gray=gray_img[y:y+w, x:x+h]
+        #perform face recognition
         label,confidence=face_recognizer.predict(roi_gray)#predicting the label of given image
         print("confidence:",confidence)
         print("label:",label)
+        #draw rectangle around the detected face
         fr.draw_rect(test_img,face)
         predicted_name=str(label)
         if confidence <70:#If confidence less than 37 then don't print predicted face text on screen
@@ -30,7 +33,7 @@ while True:
     if cv2.waitKey(10) == ord('q'):#wait until 'q' key is pressed
         break
 
-
+#releases camera
 cap.release()
-cv2.destroyAllWindows
+cv2.destroyAllWindows #properly close OpenCV windows
 
