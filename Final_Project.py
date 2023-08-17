@@ -10,7 +10,7 @@ import numpy as np
 import faceRecognition as fr
 from datetime import datetime
 
-path = 'C:\\Users\\GAUTAM\\Desktop\\faceimage_database\\training_images'
+path = 'C:\\Users\\PREETI\\Desktop\\faceimage_database\\training_images'
 
 camera_port = 0
 
@@ -108,9 +108,9 @@ def click_photo(dregistration):
         entrybranch.delete(0, 'end')
         entryemail.delete(0, 'end')
 
-    faces, faceID = fr.labels_for_training_data('C:\\Users\\GAUTAM\\Desktop\\faceimage_database\\training_images')
+    faces, faceID = fr.labels_for_training_data('C:\\Users\\PREETI\\Desktop\\faceimage_database\\training_images')
     face_recognizer = fr.train_classifier(faces, faceID)
-    face_recognizer.write('C:\\Users\\GAUTAM\\Desktop\\faceimage_database\\trainingData.yml')
+    face_recognizer.write('C:\\Users\\PREETI\\Desktop\\faceimage_database\\trainingData.yml')
 
 
 # def show_framecam(frame):
@@ -301,7 +301,7 @@ def find():
     global cap
     global face_recognizer
     face_recognizer = cv2.face.LBPHFaceRecognizer_create()
-    face_recognizer.read('C:\\Users\\GAUTAM\\Desktop\\faceimage_database\\trainingData.yml')  # Load saved training data
+    face_recognizer.read('C:\\Users\\PREETI\\Desktop\\faceimage_database\\trainingData.yml')  # Load saved training data
     cap = cv2.VideoCapture(0)
     show_frames()
 
