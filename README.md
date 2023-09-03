@@ -3,14 +3,14 @@
 ### Steps to follow-
 
 - sql file name-  'project_db1'  ;  table name - 'new_table';
-- change the path name where image files will be stored accordingly,line no 11 gui file)----   path = 'C:\\Users\\GAUTAM\\Desktop\\faceimage_database'
+- change the path name where image files will be stored accordingly,line no 11 gui file)----   path = 'C:\\Users\\PREETI\\Desktop\\faceimage_database'
 - for running file download facerecognition folder and then run finalProject folder after changing the corresponding paths.
 
 ### Project flow & explaination
 - Used open cv for face detection and determination of contour of image.
 - @created database in SQL 
 - @created gui using ktinker
-- @created face recognition model using Haarcascade
+- @created face detection and recognition model using Haarcascade
 - First it will image capture for new user and will save in a directory and will store personal data of user in SQL database.
 - @then it will train images data...
 - After image training happens 'Training data.XML'  file will be stored which will contain trained data information.
